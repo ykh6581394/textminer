@@ -330,8 +330,8 @@ with tab4:
                              node_size = 10,
                              node_color = "green",
                              alpha=.8,
-                             font_size=18, 
-                             font_family='NanumBarunGothic')
+                             font_size=18
+                             )
             plt.show()
             st.pyplot(fig1)  
             
