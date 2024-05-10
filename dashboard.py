@@ -341,6 +341,10 @@ with tab4:
                              font_size=18,
                              #font_family='NanumBarunGothic'
                              )
+            plt.show()
+            st.pyplot(fig1)
+            
+            """
             img = io.BytesIO()
             fn = 'network.png'
             plt.savefig(fig1,fn)
@@ -352,7 +356,7 @@ with tab4:
                mime="image/png"
             )
             
-            
+            """
 
 
 
