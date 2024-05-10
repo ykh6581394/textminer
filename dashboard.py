@@ -312,6 +312,13 @@ with tab4:
             
             df = df.sort_values('weight',ascending=False)
             
+            csv2 = convert_df(df)
+            st.download_button(
+                "Press Network Download",
+                csv2,
+                "wordnetwork.csv",
+                key="download_csv")
+            
             G=nx.Graph()
             
             
@@ -334,22 +341,18 @@ with tab4:
                              font_size=18,
                              #font_family='NanumBarunGothic'
                              )
-            plt.savefig('network.png')
-            with open('network.png', "rb") as img:
-                btn = st.download_button(
-                    label="Download image",
-                    data=img,
-                    file_name='network.png',
-                    mime="image/png"
-                )
+            img = io.BytesIO()
+            fn = 'network.png'
+            plt.savefig(fig1,fn)
+                        
+            btn = st.download_button(
+               label="Download image",
+               data=img,
+               file_name=fn,
+               mime="image/png"
+            )
             
             
-            csv2 = convert_df(df)
-            st.download_button(
-                "Press Network Download",
-                csv2,
-                "wordnetwork.csv",
-                key="download_csv")
 
 
 
