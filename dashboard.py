@@ -29,7 +29,7 @@ from matplotlib import font_manager as fm
 
 from gensim.models import Word2Vec
 import networkx as nx
-
+from matplotlib import rc
 
 
 
@@ -203,9 +203,9 @@ with tab4:
     sel_data = st.text_input("Select Top N (Only Network Analysis")
     progress_text = "Now Load Reply"
     my_bar2 = st.progress(0.0, text=progress_text)
-    
-    fpath = os.path.join(os.getcwd(), "Gothic_A1/GothicA1-Light.ttf")
-    prop = fm.FontProperties(fname=fpath)
+    plt.rcParams["font.family"] = os.path.join(os.getcwd(), "Gothic_A1/GothicA1-Light.ttf")
+    #fpath = os.path.join(os.getcwd(), "Gothic_A1/GothicA1-Light.ttf")
+    #prop = fm.FontProperties(fname=fpath)
     
     
     path_all = uploaded_files_csv
@@ -248,7 +248,7 @@ with tab4:
             
             fig = plt.figure(figsize = (15, 15)) # 크기 지정하기
             plt.axis('off') # 축 없애기
-            plt.imshow(img_wordcloud, fontproperties=prop) # 결과 보여주기
+            plt.imshow(img_wordcloud) # 결과 보여주기
             plt.show()
             st.pyplot(fig)
             
