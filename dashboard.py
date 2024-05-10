@@ -26,7 +26,6 @@ import konlpy
 from matplotlib import pyplot as plt
 
 from gensim.models import Word2Vec
-from tqdm import tqdm
 import networkx as nx
 
 
