@@ -331,10 +331,17 @@ with tab4:
                              node_size = 10,
                              node_color = "green",
                              alpha=.8,
-                             font_size=18
+                             font_size=18,
+                             font_family='NanumBarunGothic'
                              )
-            plt.show()
-            st.pyplot(fig1)  
+            plt.savefig('network.png')
+            with open('network.png', "rb") as img:
+                btn = st.download_button(
+                    label="Download image",
+                    data=img,
+                    file_name='network.png',
+                    mime="image/png"
+                )
             
             
             csv2 = convert_df(df)
