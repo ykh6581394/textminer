@@ -239,8 +239,9 @@ with tab4:
             df_word = df_word.query('count >= 2')
             
             df_word = df_word.groupby('word', as_index = False).count().sort_values('count', ascending = False)
-            dic_word = df_word.set_index('word').to_dict()['count']
             """
+            dic_word = df_word.set_index('word').to_dict()['count']
+            
             wc = WordCloud(random_state = 123, font_path = 'malgun', width = 400,
                            height = 400, max_font_size = 150, background_color = 'white',colormap='inferno')
             
