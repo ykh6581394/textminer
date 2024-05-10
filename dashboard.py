@@ -324,7 +324,7 @@ with tab4:
                 G.add_edge(node1,node2,weight=weight)
             
    
-    
+            plt.rcParams["font.family"] = os.path.join(os.getcwd(), "Gothic_A1/GothicA1-Light.ttf")
             pos = nx.spring_layout(G, k=0.2)
             fig1 = plt.figure(figsize=(12,8))
             nx.draw_networkx(G, pos,
@@ -332,7 +332,7 @@ with tab4:
                              node_color = "green",
                              alpha=.8,
                              font_size=18,
-                             font_family='NanumBarunGothic'
+                             #font_family='NanumBarunGothic'
                              )
             plt.savefig('network.png')
             with open('network.png', "rb") as img:
