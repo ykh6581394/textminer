@@ -240,7 +240,7 @@ with tab4:
             
             df_word = df_word.groupby('word', as_index = False).count().sort_values('count', ascending = False)
             dic_word = df_word.set_index('word').to_dict()['count']
-            
+            """
             wc = WordCloud(random_state = 123, font_path = 'malgun', width = 400,
                            height = 400, max_font_size = 150, background_color = 'white',colormap='inferno')
             
@@ -251,7 +251,7 @@ with tab4:
             plt.imshow(img_wordcloud) # 결과 보여주기
             plt.show()
             st.pyplot(fig)
-            
+            """
             csv1 = convert_df(df_word)
             st.download_button(
                 "Press Wordcloud Download",
