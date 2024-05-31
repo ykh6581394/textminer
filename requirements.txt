@@ -10,5 +10,5 @@ konlpy==0.6.0
 gensim==4.2.0
 networkx==2.6.3
 scipy==1.7.3
-pyLDAvis==3.4.0
+pyLDAvis==3.3.1
 matplotlib==3.8.0
