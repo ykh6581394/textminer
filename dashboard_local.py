@@ -284,7 +284,7 @@ with tab4:
             
             dic_word = df_word.set_index('word').to_dict()['count']
             
-            wc = WordCloud(random_state = 123, font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf', width = 400,
+            wc = WordCloud(random_state = 123, font_path = '/usr/share/fonts/nanum/NanumGothic.ttf', width = 400,
                            height = 400, max_font_size = 150, background_color = 'white',colormap='inferno')
             
             img_wordcloud = wc.generate_from_frequencies(dic_word)
@@ -381,7 +381,7 @@ with tab4:
                              node_color = "green",
                              alpha=.8,
                              font_size=18,
-                             font_family='/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
+                             font_family='/usr/share/fonts/nanum/NanumGothic.ttf'
                              )
             plt.show()
             st.pyplot(fig1)
@@ -460,7 +460,7 @@ with tab4:
                 
                 df_corpus.to_csv("corpusTop20.csv",index=False, encoding="utf-8-sig")
                     
-                csv3 = convert_df(df)
+                csv3 = convert_df(df_corpus)
                 st.download_button(
                     "[Download] Press Topic Word Download",
                     csv3,
