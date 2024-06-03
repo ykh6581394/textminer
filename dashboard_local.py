@@ -305,8 +305,11 @@ with tab4:
     if st.button("Network Analysis",help='Select Top N'):
         
         with st.spinner("Now Make Word Relations"):
-            
-                
+            import matplotlib.font_manager as fm 
+            from matplotlib import rc
+            font_name = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumGothic.ttf').get_name()
+            rc('font', family=font_name)
+                      
             kkma = konlpy.tag.Kkma() 
             
             text = df["comment"].str.replace('[^가-힣]', ' ', regex = True)
@@ -381,7 +384,8 @@ with tab4:
                              node_color = "green",
                              alpha=.8,
                              font_size=18,
-                             font_family='/usr/share/fonts/nanum/NanumGothic.ttf'
+                             font_family=font_name
+                              #font_family='/usr/share/fonts/nanum/NanumGothic.ttf'
                              )
             plt.show()
             st.pyplot(fig1)
