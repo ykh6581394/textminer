@@ -387,7 +387,7 @@ with tab4:
                              font_size=18,
                              #fontproperties=font_prop
                              #font_family=font_name
-                             font_path='/usr/share/fonts/nanum/NanumMyeongjo.ttf'
+                             font_family='NanumMyeongjo'
                              )
             plt.show()
             st.pyplot(fig1)
