@@ -236,6 +236,7 @@ with tab4:
     uploaded_files_csv =  st.file_uploader("Upload your reply csv",type=['csv'],accept_multiple_files=True)
     sel_data = st.text_input("Select Top N (Only Network Analysis)")
     sel_data2 = st.text_input("Select Cluster N (Only Topic Modeling)")
+    sel_data3 = st.text_input("Topic File Name (Only Topic Modeling)")
     progress_text = "Now Load Reply"
     my_bar2 = st.progress(0.0, text=progress_text)
     #plt.rcParams["font.family"] = os.path.join(os.getcwd(), "Gothic_A1/GothicA1-Light.ttf")
@@ -461,7 +462,7 @@ with tab4:
                 print('Average topic coherence: %.4f.' % avg_topic_coherence)
                 
                 lda_visualization = gensimvis.prepare(model, corpus, dictionary, sort_topics=False)
-                pyLDAvis.save_html(lda_visualization, 'file_name.html')
+                pyLDAvis.save_html(lda_visualization, str(sel_data3) + '_file_name.html')
                 
                 
                 df_corpus.to_csv("corpusTop20.csv",index=False, encoding="utf-8-sig")
@@ -474,6 +475,13 @@ with tab4:
                     key="download_csv")
                 
                     
+                with open(str(sel_data3) + '_file_name.html', "r", encoding='utf-8-sig') as f:
+                    st.download_button(
+                        "[Download] Press Topic Word HTML Download",
+                        data=f,
+                        file_name=str(sel_data3) + '_file_name.html',
+                        )
+
                 st.write("Save Directory : " + os.getcwd())
                 st.write("HTML File Name : " +'file_name.html')
                 st.write("CSV  File Name : " +"corpusTop20.csv")
