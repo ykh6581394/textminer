@@ -305,11 +305,11 @@ with tab4:
     if st.button("Network Analysis",help='Select Top N'):
         
         with st.spinner("Now Make Word Relations"):
-            #import matplotlib.font_manager as fm 
-            #from matplotlib import rc
+            import matplotlib.font_manager as fm 
+            from matplotlib import rc
             #font_prop = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumMyeongjo.ttf')
-            #font_name = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumMyeongjo.ttf').get_name()
-            #rc('font', family=font_name)
+            font_name = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumMyeongjo.ttf').get_name()
+            rc('font', family=font_name)
                       
             kkma = konlpy.tag.Kkma() 
             
@@ -386,8 +386,8 @@ with tab4:
                              alpha=.8,
                              font_size=18,
                              #fontproperties=font_prop
-                             #font_family=font_name
-                             font_family='NanumMyeongjo'
+                             font_family=font_name
+                             #font_family='NanumMyeongjo'
                              )
             plt.show()
             st.pyplot(fig1)
