@@ -171,7 +171,7 @@ with tab1:
         st.success('Done!')
         csv = convert_df(df)
         st.download_button(
-            "Press Download",
+            "[Download] Press Download Youtube Reply",
             csv,
             videoid + ".csv",
             key="download_csv")
@@ -187,7 +187,7 @@ with tab2:
         st.success('Done!')
         csv = convert_df(df)
         st.download_button(
-            "Press Download",
+            "[Download] Press Download Naver Reply",
             csv,
             "naver_"+str(num) + ".csv",
             key="download_csv")
@@ -224,7 +224,7 @@ with tab3:
 
 
         st.download_button(
-                        label = "Download zip",
+                        label = "[Download] Download zip",
                         data = buf.getvalue(),
                         file_name = "mydownload.zip"
                         )
@@ -260,7 +260,7 @@ with tab4:
         
         csv11 = convert_df(df)
         st.download_button(
-            "Press Data Download",
+            "[Download] Press Data Download",
             csv11,
             "reply.csv",
             key="download_csv")
@@ -284,7 +284,7 @@ with tab4:
             
             dic_word = df_word.set_index('word').to_dict()['count']
             
-            wc = WordCloud(random_state = 123, font_path = 'malgun', width = 400,
+            wc = WordCloud(random_state = 123, font_path = '/usr/share/fonts/truetype/nanum/NanumGothic.ttf', width = 400,
                            height = 400, max_font_size = 150, background_color = 'white',colormap='inferno')
             
             img_wordcloud = wc.generate_from_frequencies(dic_word)
@@ -297,7 +297,7 @@ with tab4:
             
             csv1 = convert_df(df_word)
             st.download_button(
-                "Press Wordcloud Download",
+                "[Download] Press Wordcloud Download",
                 csv1,
                 "wordcloud.csv",
                 key="download_csv")
@@ -356,7 +356,7 @@ with tab4:
             
             csv2 = convert_df(df)
             st.download_button(
-                "Press Network Download",
+                "[Download] Press Network Download",
                 csv2,
                 "wordnetwork.csv",
                 key="download_csv")
@@ -381,7 +381,7 @@ with tab4:
                              node_color = "green",
                              alpha=.8,
                              font_size=18,
-                             font_family='NanumBarunGothic'
+                             font_family='/usr/share/fonts/truetype/nanum/NanumGothic.ttf'
                              )
             plt.show()
             st.pyplot(fig1)
@@ -459,7 +459,15 @@ with tab4:
                 
                 
                 df_corpus.to_csv("corpusTop20.csv",index=False, encoding="utf-8-sig")
+                    
+                csv3 = convert_df(df)
+                st.download_button(
+                    "[Download] Press Topic Word Download",
+                    csv3,
+                    "corpusTop20.csv",
+                    key="download_csv")
                 
+                    
                 st.write("Save Directory : " + os.getcwd())
                 st.write("HTML File Name : " +'file_name.html')
                 st.write("CSV  File Name : " +"corpusTop20.csv")
