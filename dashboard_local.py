@@ -384,8 +384,8 @@ with tab4:
                              node_color = "green",
                              alpha=.8,
                              font_size=18,
-                             font_family=font_name
-                              #font_family='/usr/share/fonts/nanum/NanumGothic.ttf'
+                             #font_family=font_name
+                             font_path='/usr/share/fonts/nanum/NanumGothic.ttf'
                              )
             plt.show()
             st.pyplot(fig1)
