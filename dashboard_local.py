@@ -10,6 +10,7 @@ import io
 import os
 import zipfile
 import pandas as pd
+from io import BytesIO
 from googleapiclient.discovery import build
 import warnings
 warnings.filterwarnings('ignore')
@@ -45,6 +46,8 @@ import pyLDAvis.gensim_models as gensimvis
 import pyLDAvis
 from gensim.models.coherencemodel import CoherenceModel
 import matplotlib.pyplot as plt
+
+import instaloader
 
 
 def oneLenFiter(nouns_1):
@@ -152,13 +155,53 @@ def save_processed_data(processed_data, title):
         for data in processed_data:
             writer.writerow(data)
             
+            
+def instaCrawler(post_url):
+
+    post_shortcode = post_url.split('/')[-2]
+    post = instaloader.Post.from_shortcode(L.context, post_shortcode)
+    
+    usr_id = str(post.owner_profile).split(" ")[1]
+    num_likes = post.likes
+    
+    
+    # 댓글을 추출합니다.
+    comments = []
+    for comment in post.get_comments():
+        comments.append({
+            'id': comment.id,
+            'reply': comment.text,
+            'created_at': comment.created_at_utc,
+            'owner': comment.owner.username
+        })
+    likes = [num_likes]*len(comments)
+    df = pd.DataFrame(comments)
+    df["likes"] = likes 
+    return usr_id, df       
 
 
 @st.cache_data
 def convert_df(df):
    return df.to_csv(index=False).encode('utf-8-sig')
-    
-tab1, tab2, tab3, tab4 = st.tabs(["You tube", "Naver", "URL All", "NLP"])
+
+
+@st.cache_data
+def to_excel(dfs, ids):
+    output = BytesIO()
+    writer = pd.ExcelWriter(output, engine='xlsxwriter')
+    for d in range(len(dfs)):
+        df1 = dfs[d]
+        id1 = ids[d]
+        df1.to_excel(writer, index=False, sheet_name=id1)
+    writer.close()
+    processed_data = output.getvalue()
+    return processed_data
+
+
+
+
+
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["You tube", "Naver", "URL All", "Insta", "NLP"])
 
 with tab1:
     url_you = st.text_input("Youtube Link")
@@ -230,9 +273,51 @@ with tab3:
                         )
         st.balloons()
                 
-      
-
 with tab4:
+    uploaded_files_instalink =  st.file_uploader("Upload your insta Links",type=['csv'],accept_multiple_files=False)
+    idd = st.text_input("Instagram ID")
+    pww = st.text_input("Instagram PW", type="password")
+    if st.button("Crawling"):
+        urls = list(pd.read_csv(uploaded_files_instalink)["url"])
+        L = instaloader.Instaloader()
+        try:
+            L.login(idd, pww)
+            st.write("Success Login")
+        except Exception as e:
+            st.write("인스타그램에 로그인하여 본인 확인을 진행하세요.")
+            st.error(f"An error occurred: {e}")
+            
+        
+        ids = []
+        dfs =[]
+    
+        my_bar3 = st.progress(0.0, text="Now Crawling Reply")
+        for u in range(len(urls)):
+            my_bar3.progress(100*(u+1)//len(urls))
+            usr_id, df = instaCrawler(urls[u])
+            ids.append(usr_id)
+            dfs.append(df)
+        # CSV 파일로 저장
+        excel_data = to_excel(dfs, ids)
+        
+        """#df.to_csv('instagram_comments.csv', index=False, encoding="utf-8-sig")
+        with pd.ExcelWriter('Insta_Reply.xlsx') as writer:
+            for d in range(len(dfs)):
+                df1 = dfs[d]
+                id1 = ids[d]
+                df1.to_excel(writer, sheet_name=id1)
+            """
+        st.download_button(
+                label = "Download Excel",
+                data  = excel_data,
+                file_name = 'InstaReply.xlsx',
+                mime = "application/vnd.ms-excel"
+            )
+                        
+                    
+
+
+with tab5:
     uploaded_files_csv =  st.file_uploader("Upload your reply csv",type=['csv'],accept_multiple_files=True)
     sel_data = st.text_input("Select Top N (Only Network Analysis)")
     sel_data2 = st.text_input("Select Cluster N (Only Topic Modeling)")
