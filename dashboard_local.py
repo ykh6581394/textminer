@@ -16,11 +16,11 @@ import warnings
 warnings.filterwarnings('ignore')
 from selenium import webdriver
 from  selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 import time
 from bs4 import BeautifulSoup
-from webdriver_manager.firefox import GeckoDriverManager
+from webdriver_manager.chrome import ChromeDriverManager
 
 from wordcloud import WordCloud
 import konlpy
@@ -94,17 +94,19 @@ def youtubeReplyCrawler(url, api_key, path):
     #df.to_csv(directory+'/'+path+'/'+file_name+'.csv', index=None)
     
 def getNavernewsReply(url, num , path, wait_time=5, delay_time=0.1):
+    """
     def installff():
         os.system('sbase install geckodriver')
         os.system('ln -s /home/appuser/venv/lib/python3.7/site-packages/seleniumbase/drivers/geckodriver /home/appuser/venv/bin/geckodriver')
 
     _ = installff()
     service = Service(GeckoDriverManager().install())
+    """
     options = Options() 
     options.add_argument("--headless=new")
     #options.binary_location = 'C:/Program Files/Mozilla Firefox/firefox.exe'
-
-    driver = webdriver.Firefox(options=options, service=service)
+    driver = webdriver.Chrome(options=options)
+    #driver = webdriver.Firefox(options=options, service=service)
     driver.implicitly_wait(wait_time)
     driver.get(url)
     
@@ -226,7 +228,7 @@ with tab2:
     
     if st.button("Crawl Naver News Reply"):
         with st.spinner('Wait for it...'):
-            df = getNavernewsReply(url_naver, num, "naver", wait_time=5, delay_time=0.1)
+            df = getNavernewsReply(url_naver, num, "naver", wait_time=3, delay_time=0.2)
         st.success('Done!')
         csv = convert_df(df)
         st.download_button(
@@ -370,7 +372,7 @@ with tab5:
             
             dic_word = df_word.set_index('word').to_dict()['count']
             
-            wc = WordCloud(random_state = 123, font_path = '/usr/share/fonts/nanum/NanumGothic.ttf', width = 400,
+            wc = WordCloud(random_state = 123, font_path =  'malgun', width = 400,
                            height = 400, max_font_size = 150, background_color = 'white',colormap='inferno')
             
             img_wordcloud = wc.generate_from_frequencies(dic_word)
@@ -394,9 +396,7 @@ with tab5:
             import matplotlib.font_manager as fm 
             from matplotlib import rc
             #font_prop = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumMyeongjo.ttf')
-            font_name = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumMyeongjo.ttf').get_name()
-            rc('font', family=font_name)
-                      
+           
             kkma = konlpy.tag.Kkma() 
             
             text = df["comment"].str.replace('[^가-힣]', ' ', regex = True)
@@ -472,8 +472,7 @@ with tab5:
                              alpha=.8,
                              font_size=18,
                              #fontproperties=font_prop
-                             font_family=font_name
-                             #font_family='NanumMyeongjo'
+                             font_family='NanumMyeongjo'
                              )
             plt.show()
             st.pyplot(fig1)
