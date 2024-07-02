@@ -374,7 +374,7 @@ with tab5:
             
             dic_word = df_word.set_index('word').to_dict()['count']
             
-            wc = WordCloud(random_state = 123, font_path =  'malgun', width = 400,
+            wc = WordCloud(random_state = 123, font_path = '/usr/share/fonts/nanum/NanumGothic.ttf', width = 400,
                            height = 400, max_font_size = 150, background_color = 'white',colormap='inferno')
             
             img_wordcloud = wc.generate_from_frequencies(dic_word)
