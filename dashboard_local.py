@@ -133,7 +133,7 @@ def getNavernewsReply(url, num , path, wait_time=5, delay_time=0.1):
     list_sum = list(zip(list_nicknames,list_datetimes,list_contents))
 
     driver.quit()
-    col = ['작성자','시간','내용']
+    col = ['작성자','시간','comment']
 
     df = pd.DataFrame(list_sum, columns=col)
     return df
@@ -169,12 +169,12 @@ def instaCrawler(post_url):
     
     # 댓글을 추출합니다.
     comments = []
-    for comment in post.get_comments():
+    for commentt in post.get_comments():
         comments.append({
-            'id': comment.id,
-            'reply': comment.text,
-            'created_at': comment.created_at_utc,
-            'owner': comment.owner.username
+            'id': commentt.id,
+            'comment': commentt.text,
+            'created_at': commentt.created_at_utc,
+            'owner': commentt.owner.username
         })
     likes = [num_likes]*len(comments)
     df = pd.DataFrame(comments)
@@ -302,13 +302,6 @@ with tab4:
         # CSV 파일로 저장
         excel_data = to_excel(dfs, ids)
         
-        """#df.to_csv('instagram_comments.csv', index=False, encoding="utf-8-sig")
-        with pd.ExcelWriter('Insta_Reply.xlsx') as writer:
-            for d in range(len(dfs)):
-                df1 = dfs[d]
-                id1 = ids[d]
-                df1.to_excel(writer, sheet_name=id1)
-            """
         st.download_button(
                 label = "Download Excel",
                 data  = excel_data,
@@ -320,10 +313,10 @@ with tab4:
 
 
 with tab5:
-    uploaded_files_csv =  st.file_uploader("Upload your reply csv",type=['csv'],accept_multiple_files=True)
-    sel_data = st.text_input("Select Top N (Only Network Analysis)")
-    sel_data2 = st.text_input("Select Cluster N (Only Topic Modeling)")
-    sel_data3 = st.text_input("Topic File Name (Only Topic Modeling)")
+    uploaded_files_csv =  st.file_uploader("Upload your reply csv",type=['csv','xlsx'],accept_multiple_files=True)
+    sel_data = st.text_input("[Network Analysis] Select Top N")
+    sel_data2 = st.text_input("[Topic Modeling] Select Cluster N")
+    sel_data3 = st.text_input("[Topic Modeling] Topic File Name")
     progress_text = "Now Load Reply"
     my_bar2 = st.progress(0.0, text=progress_text)
     #plt.rcParams["font.family"] = os.path.join(os.getcwd(), "Gothic_A1/GothicA1-Light.ttf")
@@ -335,9 +328,18 @@ with tab5:
     df = pd.DataFrame()
     each_len = []
     for idx in range(len(path_all)):
+        #st.write(path_all[idx].name)
         my_bar2.progress(100*(idx+1)//len(path_all))
-        df_unit = pd.read_csv(path_all[idx])
-        each_len.append(len(df_unit))
+        if str(path_all[idx].name).endswith("csv"):
+            df_unit = pd.read_csv(path_all[idx])
+            df_unit = df_unit["comment"]
+            each_len.append(len(df_unit))
+        elif str(path_all[idx].name).endswith("xlsx"):
+            df_unit = pd.read_excel(path_all[idx], sheet_name=None)
+            df_unit = pd.concat(df_unit, ignore_index=True)
+            df_unit = df_unit["comment"]
+            each_len.append(len(df_unit))
+            
         df = pd.concat([df, df_unit], ignore_index = True)
         
     if st.button("Summarizing All Reply"):
@@ -357,7 +359,7 @@ with tab5:
         with st.spinner("Now Make Wordcloud"):
                 
             kkma = konlpy.tag.Kkma() 
-            
+            df.columns = ["comment"]
             text = df["comment"].str.replace('[^가-힣]', ' ', regex = True)
             
             nouns = text.apply(kkma.nouns)
@@ -398,7 +400,8 @@ with tab5:
             #font_prop = fm.FontProperties(fname='/usr/share/fonts/nanum/NanumMyeongjo.ttf')
            
             kkma = konlpy.tag.Kkma() 
-            
+            #df = pd.DataFrame(df, columns = ["comment"])
+            df.columns = ["comment"]
             text = df["comment"].str.replace('[^가-힣]', ' ', regex = True)
             
             nouns = text.apply(kkma.nouns)
@@ -482,6 +485,7 @@ with tab5:
         with st.spinner("Now Make DataFrame"):
             
             title = "reply.csv"
+            df.columns = ["comment"]
             df.dropna(how='any')
             
             tokenizer = Okt()
@@ -566,6 +570,6 @@ with tab5:
                         file_name=str(sel_data3) + '_file_name.html',
                         )
 
-                st.write("Save Directory : " + os.getcwd())
+                #st.write("Save Directory : " + os.getcwd())
                 st.write("HTML File Name : " +'file_name.html')
                 st.write("CSV  File Name : " +"corpusTop20.csv")
